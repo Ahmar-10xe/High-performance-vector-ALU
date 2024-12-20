@@ -34,7 +34,7 @@ module alu #(
 
   // Instantiations
 
-  KS_ADDER DUT1 (
+  ks_adder DUT1 (
       .a(a_reg[7:0]),
       .b(adder_b[7:0]),
       .cin(carry_in),
@@ -43,7 +43,7 @@ module alu #(
   );
 
 
-  KS_ADDER DUT2 (
+  ks_adder DUT2 (
       .a(a_reg[15:8]),
       .b(adder_b[15:8]),
       .cin(c2),
@@ -51,7 +51,7 @@ module alu #(
       .carry(c3)
   );
 
-  KS_ADDER DUT3 (
+  ks_adder DUT3 (
       .a(a_reg[23:16]),
       .b(adder_b[23:16]),
       .cin(c4),
@@ -59,7 +59,7 @@ module alu #(
       .carry(c5)
   );
 
-  KS_ADDER DUT4 (
+  ks_adder DUT4 (
       .a(a_reg[31:24]),
       .b(adder_b[31:24]),
       .cin(c6),
@@ -67,7 +67,7 @@ module alu #(
       .carry(c7)
   );
 
-  KS_ADDER DUT5 (
+  ks_adder DUT5 (
       .a(a_reg[39:32]),
       .b(adder_b[39:32]),
       .cin(c8),
@@ -75,7 +75,7 @@ module alu #(
       .carry(c9)
   );
 
-  KS_ADDER DUT6 (
+  ks_adder DUT6 (
       .a(a_reg[47:40]),
       .b(adder_b[47:40]),
       .cin(c10),
@@ -83,7 +83,7 @@ module alu #(
       .carry(c11)
   );
 
-  KS_ADDER DUT7 (
+  ks_adder DUT7 (
       .a(a_reg[55:48]),
       .b(adder_b[55:48]),
       .cin(c12),
@@ -91,7 +91,7 @@ module alu #(
       .carry(c13)
   );
 
-  KS_ADDER DUT8 (
+  ks_adder DUT8 (
       .a(a_reg[63:56]),
       .b(adder_b[63:56]),
       .cin(c14),
@@ -123,11 +123,18 @@ module alu #(
   assign sub_d = (opcode[2] & opcode[1]) | (opcode[3] & opcode[0] ) | (opcode[3] & opcode[1] );          // sub signal used to determine whether to perform addition or subtraction
 
   // Averaging add and sub operations
-  for (genvar i = BITS - 9; i > WIDTH - 2; i = i - 8) begin
+  /*for (genvar i = BITS - 9; i > WIDTH - 2; i = i - 8) begin
     assign avg_add_sub_out[i:i-7] = {enable[(i-7)/8] ? result[i+1] : result[i], result[i:i-6]};
   end
 
-  assign avg_add_sub_out[63:56] = {result[63], result[63:57]};
+  assign avg_add_sub_out[63:56] = {result[63], result[63:57]};  */
+  
+    // Averaging add and sub operations
+  for (genvar i = BITS - 9; i > WIDTH - 2; i = i - 8) begin
+    assign avg_add_sub_out[i:i-7] = {enable[(i-7)/8] ? result[i+1] : 1'b0, result[i:i-6]};
+  end
+
+  assign avg_add_sub_out[63:56] = {1'b0, result[63:57]};
 
   // Carry selection based on enable signals
   assign c2  = enable[0] ? c1  : (sub ? 1 : 0);

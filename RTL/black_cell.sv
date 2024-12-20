@@ -1,4 +1,4 @@
-module blackCell (
+module black_cell (
     output logic G,       // Output Generate signal
     output logic P,       // Output Propagate signal
     input  logic Gi,      // Generate signal of ith stage

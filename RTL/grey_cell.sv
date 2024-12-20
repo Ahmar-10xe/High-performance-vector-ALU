@@ -1,4 +1,4 @@
-module grayCell (
+module gray_cell (
     output logic G,  // Output Generate signal
     input logic Gi,  // Generate signal of ith stage
     input logic Pi,  // Propagate signal of ith stage
